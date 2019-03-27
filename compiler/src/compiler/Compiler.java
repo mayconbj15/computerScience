@@ -20,22 +20,22 @@ public class Compiler {
 	}
 	
 	public String reader() throws IOException {
-		String stringCommands = "";
+		String stringValues = "";
 		input = new Scanner(System.in);
 		
 		try {
 			this.file = new RandomAccessFile(this.nameFile, "rw");
 			
 			while(file.getFilePointer() < file.length()) {
-				stringCommands = stringCommands + " " + file.readLine();
+				stringValues = stringValues + " " + file.readLine();
 				
 				//esperar para processar o comando
 				
 				/*if(file.readChar() == '\n') {
 					System.out.println("QUEBRA");
 				}*/
-				System.out.println("stringCommands " + stringCommands);
-				System.out.println("stringCommands " + stringCommands.charAt(1));
+				System.out.println("stringValues " + stringValues);
+				System.out.println("stringValues " + stringValues.charAt(1));
 			}
 			
 			
@@ -45,12 +45,11 @@ public class Compiler {
 			fnfe.printStackTrace();
 		}
 		
-		String[] aux = translate(stringCommands);
-		for(int i=0; i<aux.length; i++) {
-			System.out.println(aux[i]);
-		}
+		String[] aux = translate(stringValues);
+		System.out.println("A = " + aux[0]);
+		System.out.println("B = " + aux[1]);
 		
-		return stringCommands;
+		return stringValues;
 	}
 	
 	public String[] translate(String string) {
@@ -83,8 +82,15 @@ public class Compiler {
 				i+=5; //pula para próxima instrução
 			}
 		}
+		
+		//values[0] = Integer.toHexString(Integer.parseInt(values[0]));
+		//values[1] = Integer.toHexString(Integer.parseInt(values[1]));
 	
 		return values;
+	}
+	
+	public void generateByteCode(String stringValues, String stringCommands) {
+		
 	}
 	
 }
