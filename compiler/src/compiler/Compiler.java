@@ -30,10 +30,9 @@ public class Compiler {
 			this.file = new RandomAccessFile(this.nameFile, "rw");
 			
 			while(file.getFilePointer() < file.length()) {
-				stringValues = stringValues + " " + file.readLine();
+				stringValues = stringValues + file.readLine();
 				
 				System.out.println("stringValues " + stringValues);
-				System.out.println("stringValues " + stringValues.charAt(1));
 			}
 			
 			
@@ -46,6 +45,17 @@ public class Compiler {
 		//String[] aux = translate(stringValues);
 		
 		makeArray(stringValues);
+		takeOffSpaces();
+		System.out.println("Later make Array\n");
+		for(int i=0; i<this.strings.length; i++) {
+			System.out.print(this.strings[i] + " " + "tam: " + this.strings[i].length());
+			System.out.println();
+		}
+		System.out.println();
+		for(int i=0; i<this.strings[0].length(); i++) {
+			System.out.print(this.strings[i]);
+		}
+		System.out.println();
 		translate();
 		generateByteCode();
 		
@@ -53,9 +63,48 @@ public class Compiler {
 			System.out.println(this.strings[i] + ": " + "isInstruction: " + isInstruction(this.strings[i])
 					+ " :" + "isAtribution: " + isAtribution(this.strings[i]));
 		}
+		System.out.println("ARRAY LISTA\n");
+		for(int i=0; i<this.commands.size(); i++) {
+			System.out.println(this.commands.get(i));
+		}
 		return stringValues;
 	}
 	
+	public void takeOffSpaces() {
+		for(int i=0; i<this.strings.length; i++) {
+			if(haveSpaces(strings[i]))
+				this.strings[i] = noSpace(this.strings[i]);
+		}
+	}
+	
+	public boolean haveSpaces(String str) {
+		boolean haveSpace = false;
+		
+		for(int i=0; i<str.length() && haveSpace == false; i++) {
+			if(str.charAt(i) == ' ')
+				haveSpace = true;
+		}
+		return haveSpace;
+	}
+	
+	public String noSpace(String str) {
+		String newString;
+		char[] vetAux = new char[str.length()-1];
+		
+		int j=0;
+		for(int i=0; i<str.length(); i++ ) {
+			System.out.println(str + " " + str.length());
+			
+			if(str.charAt(i) != ' ') {
+				vetAux[j] = str.charAt(i);
+				j++;
+			}
+		}
+		
+		newString = convertCharToString(vetAux);
+		
+		return newString;
+	}
 	/**
 	 * Método que separa cada instrução e cada atribuição
 	 * @param stringValues
@@ -70,10 +119,55 @@ public class Compiler {
 		System.out.println();
 	}
 	
-	public void cript(String stringsCommands){
-		for(int i=0; i<stringsCommands.length(); i++){
-			
+	/**
+	 * Método que cria um ArrayList com as instruções tranduzidas
+	 */
+	public void translate() {
+		char a = ' ';
+		char b = ' ';
+		
+		this.byteCode = new char[3];
+		
+		for(int i=0; i<this.strings.length; i++) {
+			if(!isInstruction(strings[i])){
+				//tratar os valores
+				if(this.strings[i].charAt(0) == 'a' || this.strings[i].charAt(0) == 'A'){
+					if(strings[i].length() == 3) //um numero entre 0 e 9
+						a = this.strings[i].charAt(2);
+					else if(strings[i].length() == 4) //numero entre A e F
+						a = toHex(this.strings[i].substring(2));
+				}
+				else if(strings[i].charAt(0) == 'b' || strings[i].charAt(0) == 'B'){
+					if(strings[i].length() == 3) //um numero entre 0 e 9
+						b = this.strings[i].charAt(2);
+					else if(strings[i].length() == 4) //numero entre A e F
+						b = toHex(this.strings[i].substring(2));
+				}
+			}
+			else if(isInstruction(strings[i])) {
+				//descobrir qual atribuição e então criar um código hexa
+				System.out.println("TRANSLATE INSTRUCTION");
+				System.out.println(this.strings[i]);
+				
+				this.byteCode[0] = a;
+				this.byteCode[1] = b;
+				this.byteCode[2] = whoInstruction(strings[i]);
+				
+				this.commands.add(convertCharToString(this.byteCode));
+				
+				System.out.println("instruction");
+				System.out.println(this.byteCode[2]);
+				System.out.println("BYTE CODE");
+				System.out.print(byteCode[0]);
+				System.out.print(byteCode[1]);
+				System.out.print(byteCode[2]);
+				System.out.println();
+			}
 		}
+		
+	
+		
+		
 	}
 	
 	public boolean isInstruction(String instruction){
@@ -99,35 +193,6 @@ public class Compiler {
 		return isAtribution;
 	}
 	
-	/**
-	 * Método que cria um ArrayList com as instruções tranduzidas
-	 */
-	public void translate() {
-		this.byteCode = new char[3];
-		
-		for(int i=0; i<this.strings.length; i++) {
-			if(!isInstruction(strings[i])){
-				//tratar os valores
-				if(strings[i].charAt(0) == 'a' || strings[i].charAt(0) == 'A'){
-					this.byteCode[0] = this.strings[i].charAt(2);
-				}
-				if(strings[i].charAt(0) == 'b' || strings[i].charAt(0) == 'B'){
-					this.byteCode[1] = this.strings[i].charAt(2);
-				}
-			}
-			else if(isAtribution(strings[i])) {
-				this.byteCode[2] = whoAtribution(strings[i]);
-			}
-			System.out.println("BYTE CODE");
-			System.out.print(byteCode[0]);
-			System.out.print(byteCode[1]);
-			System.out.print(byteCode[2]);
-		}
-		
-		this.commands.add(convertCharToString(this.byteCode));
-		System.out.println("ARRAY LISTA");
-		System.out.println(commands.get(0));
-	}
 	
 	public String convertCharToString(char[] byteCode) {
 		String str = "";
@@ -139,15 +204,33 @@ public class Compiler {
 		return str;
 	}
 	
-	public char whoAtribution(String str) {
-		char c = ' ';
+	public char toHex(String str) {
+		char newChar = ' ';
 		
+		switch(str) {
+			case "10": newChar = 'A';
+			case "11": newChar = 'B';
+			case "12": newChar = 'C';
+			case "13": newChar = 'D';
+			case "14": newChar = 'E';
+			case "15": newChar = 'F';
+		}
+		
+		return newChar;
+	}
+	
+	public char whoInstruction(String str) {
+		char c = ' ';
+		System.out.println("teste " + str);
+		if(str.contentEquals("AouB")) {
+			System.out.println("BUCETA CABELUDA");
+		}
 		switch(str) {
 			case "zeroL": c = '0'; break;
 			case "umL": c = '1'; break;
 			case "An": c = '2'; break;
 			case "Bn": c = '3'; break;
-			case "AouB": c = '4'; break;
+			case "AouB": c = '4'; System.out.println("CARAI"); break;
 			case "AeB": c = '5'; break;
 			case "AxorB": c = '6'; break;
 			case "AnandB": c = '7'; break;
