@@ -245,15 +245,16 @@ public class Compiler {
 
 	public void generateByteCode() throws IOException {
 		try{
-			file = new RandomAccessFile("testeHex.txt", "rw");
+			file = new RandomAccessFile("testeHex.hex", "rw");
 			
 			int len = this.commands.size();
 			
 			for(int i=0; i<len; i++) {
 				String aux = this.commands.get(i);
 				for(int j=0; j<aux.length(); j++) {
-					file.writeChar(aux.charAt(j));
-				}				
+					file.write(aux.charAt(j));
+				}
+				file.writeChar('\n');
 			}
 			
 			file.close();

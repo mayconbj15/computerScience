@@ -9,7 +9,7 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 		ArrayList<String> commands = new ArrayList<String>();
-		Compiler compiler = new Compiler("teste.txt");
+		Compiler compiler = new Compiler("testeUla.ula");
 		
 		commands = compiler.reader();
 
