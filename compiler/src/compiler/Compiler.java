@@ -221,16 +221,13 @@ public class Compiler {
 	
 	public char whoInstruction(String str) {
 		char c = ' ';
-		System.out.println("teste " + str);
-		if(str.contentEquals("AouB")) {
-			System.out.println("BUCETA CABELUDA");
-		}
+	
 		switch(str) {
 			case "zeroL": c = '0'; break;
 			case "umL": c = '1'; break;
 			case "An": c = '2'; break;
 			case "Bn": c = '3'; break;
-			case "AouB": c = '4'; System.out.println("CARAI"); break;
+			case "AouB": c = '4'; break;
 			case "AeB": c = '5'; break;
 			case "AxorB": c = '6'; break;
 			case "AnandB": c = '7'; break;
@@ -245,43 +242,7 @@ public class Compiler {
 		}
 		return c;
 	}
-	/*public String[] translate(String string) {
-		int i=1;
-		int len = string.length();
 
-		String[] values = new String[2];
-		
-		while(i < len) {
-			if(i < len && string.charAt(i) == 'a') {
-				//atribui o valor de a
-				System.out.println("A");
-				i+=2;
-				values[0] = Character.toString(string.charAt(i));
-				
-				i+=3; //pula para a outra instrução
-			}
-			
-			if(i < len && string.charAt(i) == 'b') {
-				//atribui o valor de b
-				System.out.println("B");
-				i+=2;
-				values[1] = Character.toString(string.charAt(i));
-				
-				i+=3; //pula para a outra instrução
-			}
-			
-			
-			if(i < len && string.charAt(i) != 'a' && string.charAt(i) != 'b') {
-				i+=5; //pula para próxima instrução
-			}
-		}
-		
-		//values[0] = Integer.toHexString(Integer.parseInt(values[0]));
-		//values[1] = Integer.toHexString(Integer.parseInt(values[1]));
-	
-		return values;
-	}*/
-	
 	public void generateByteCode() throws IOException {
 		try{
 			file = new RandomAccessFile("testeHex.txt", "rw");
