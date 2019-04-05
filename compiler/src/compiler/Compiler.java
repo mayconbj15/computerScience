@@ -67,7 +67,7 @@ public class Compiler {
 		for(int i=0; i<this.commands.size(); i++) {
 			System.out.println(this.commands.get(i));
 		}
-		return stringValues;
+		return this.commands;
 	}
 	
 	public void takeOffSpaces() {
@@ -240,7 +240,7 @@ public class Compiler {
 			case "AouBn": c = 'B'; break;
 			case "AneB": c = 'C'; break;
 			case "AeBn": c = 'D'; break;
-			case "AnounBn": c = 'E'; break;
+			case "AnouBn": c = 'E'; break;
 			case "AneBn": c = 'F'; break;
 		}
 		return c;

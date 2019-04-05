@@ -1,1 +1,16 @@
-A=5; B=2; An; Bn; AnandB; A=D; AneB;
+A=5; 
+B=2; 
+An; 
+Bn; 
+AnandB; 
+A=D; 
+AneB;
+A=F;
+B=C;
+AxorB;
+AneB;
+AnouBn;
+a=7;
+AxorB;
+AneB;
+AnouBn;
