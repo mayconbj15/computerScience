@@ -21,7 +21,7 @@ public class Compiler {
 		this.commands = new ArrayList<String>();
 	}
 	
-	public String reader() throws IOException {
+	public ArrayList<String> reader() throws IOException {
 		String stringValues = "";
 		input = new Scanner(System.in);
 		
