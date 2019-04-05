@@ -149,9 +149,17 @@ public class Compiler {
 				System.out.println("TRANSLATE INSTRUCTION");
 				System.out.println(this.strings[i]);
 				
-				this.byteCode[0] = a;
-				this.byteCode[1] = b;
-				this.byteCode[2] = whoInstruction(strings[i]);
+				if(charIsValid(a))
+					this.byteCode[0] = a;
+				else
+					this.byteCode[0] = 'i';
+				
+				if(charIsValid(b))
+					this.byteCode[1] = b;
+				else
+					this.byteCode[0] = 'i';
+				
+				this.byteCode[2] = whoInstruction(strings[i].substring(0));
 				
 				this.commands.add(convertCharToString(this.byteCode));
 				
@@ -164,10 +172,16 @@ public class Compiler {
 				System.out.println();
 			}
 		}
-		
+	}
 	
+	public boolean charIsValid(char c) {
+		boolean isValid = false;
 		
+		if(c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F') {
+			isValid = true;
+		}
 		
+		return isValid;
 	}
 	
 	public boolean isInstruction(String instruction){
@@ -239,6 +253,7 @@ public class Compiler {
 			case "AeBn": c = 'D'; break;
 			case "AnouBn": c = 'E'; break;
 			case "AneBn": c = 'F'; break;
+			default: c = 'i'; break;
 		}
 		return c;
 	}
