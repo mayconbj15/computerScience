@@ -12,12 +12,13 @@ public class Compiler {
 	public RandomAccessFile file;
 	public String nameFile;
 	Scanner input;
-	//ArrayList<String> strings;
+	ArrayList<String> commands;
 	public String[] strings;
+	public char[] byteCode;
 	
 	public Compiler(String nameFile) {
 		this.nameFile = nameFile;
-		//this.strings = new ArrayList<String>();
+		this.commands = new ArrayList<String>();
 	}
 	
 	public String reader() throws IOException {
@@ -45,6 +46,8 @@ public class Compiler {
 		//String[] aux = translate(stringValues);
 		
 		makeArray(stringValues);
+		translate();
+		generateByteCode();
 		
 		for(int i=0; i<this.strings.length; i++){
 			System.out.println(this.strings[i] + ": " + "isInstruction: " + isInstruction(this.strings[i])
@@ -53,6 +56,10 @@ public class Compiler {
 		return stringValues;
 	}
 	
+	/**
+	 * Método que separa cada instrução e cada atribuição
+	 * @param stringValues
+	 */
 	public void makeArray(String stringValues){
 		this.strings = stringValues.split(";");
 		
@@ -92,6 +99,69 @@ public class Compiler {
 		return isAtribution;
 	}
 	
+	/**
+	 * Método que cria um ArrayList com as instruções tranduzidas
+	 */
+	public void translate() {
+		this.byteCode = new char[3];
+		
+		for(int i=0; i<this.strings.length; i++) {
+			if(!isInstruction(strings[i])){
+				//tratar os valores
+				if(strings[i].charAt(0) == 'a' || strings[i].charAt(0) == 'A'){
+					this.byteCode[0] = this.strings[i].charAt(2);
+				}
+				if(strings[i].charAt(0) == 'b' || strings[i].charAt(0) == 'B'){
+					this.byteCode[1] = this.strings[i].charAt(2);
+				}
+			}
+			else if(isAtribution(strings[i])) {
+				this.byteCode[2] = whoAtribution(strings[i]);
+			}
+			System.out.println("BYTE CODE");
+			System.out.print(byteCode[0]);
+			System.out.print(byteCode[1]);
+			System.out.print(byteCode[2]);
+		}
+		
+		this.commands.add(convertCharToString(this.byteCode));
+		System.out.println("ARRAY LISTA");
+		System.out.println(commands.get(0));
+	}
+	
+	public String convertCharToString(char[] byteCode) {
+		String str = "";
+		
+		for(int i=0; i<byteCode.length; i++) {
+			str = str + byteCode[i];
+		}
+		
+		return str;
+	}
+	
+	public char whoAtribution(String str) {
+		char c = ' ';
+		
+		switch(str) {
+			case "zeroL": c = '0'; break;
+			case "umL": c = '1'; break;
+			case "An": c = '2'; break;
+			case "Bn": c = '3'; break;
+			case "AouB": c = '4'; break;
+			case "AeB": c = '5'; break;
+			case "AxorB": c = '6'; break;
+			case "AnandB": c = '7'; break;
+			case "AnorB": c = '8'; break;
+			case "AxnorB": c = '9'; break;
+			case "AnouB": c = 'A'; break;
+			case "AouBn": c = 'B'; break;
+			case "AneB": c = 'C'; break;
+			case "AeBn": c = 'D'; break;
+			case "AnounBn": c = 'E'; break;
+			case "AneBn": c = 'F'; break;
+		}
+		return c;
+	}
 	/*public String[] translate(String string) {
 		int i=1;
 		int len = string.length();
@@ -129,12 +199,18 @@ public class Compiler {
 		return values;
 	}*/
 	
-	public void generateByteCode(String stringValues) throws IOException {
-		//String aux = "";
-		
+	public void generateByteCode() throws IOException {
 		try{
 			file = new RandomAccessFile("testeHex.txt", "rw");
 			
+			int len = this.commands.size();
+			
+			for(int i=0; i<len; i++) {
+				String aux = this.commands.get(i);
+				for(int j=0; j<aux.length(); j++) {
+					file.writeChar(aux.charAt(j));
+				}				
+			}
 			
 			file.close();
 		}catch(FileNotFoundException fnfe){
