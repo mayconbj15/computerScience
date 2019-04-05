@@ -7,8 +7,6 @@ public class Main {
 		Compiler compiler = new Compiler("teste.txt");
 		Compiler compiler1 = new Compiler("teste1.txt");
 		
-		
-		
 		String aux = compiler.reader();
 		String aux1 = compiler1.reader();
 		

@@ -12,16 +12,18 @@ public class Compiler {
 	public RandomAccessFile file;
 	public String nameFile;
 	Scanner input;
-	ArrayList<String> strings;
+	//ArrayList<String> strings;
+	public String[] strings;
 	
 	public Compiler(String nameFile) {
 		this.nameFile = nameFile;
-		this.strings = new ArrayList<String>();
+		//this.strings = new ArrayList<String>();
 	}
 	
 	public String reader() throws IOException {
 		String stringValues = "";
 		input = new Scanner(System.in);
+		
 		
 		try {
 			this.file = new RandomAccessFile(this.nameFile, "rw");
@@ -29,11 +31,6 @@ public class Compiler {
 			while(file.getFilePointer() < file.length()) {
 				stringValues = stringValues + " " + file.readLine();
 				
-				//esperar para processar o comando
-				
-				/*if(file.readChar() == '\n') {
-					System.out.println("QUEBRA");
-				}*/
 				System.out.println("stringValues " + stringValues);
 				System.out.println("stringValues " + stringValues.charAt(1));
 			}
@@ -45,14 +42,57 @@ public class Compiler {
 			fnfe.printStackTrace();
 		}
 		
-		String[] aux = translate(stringValues);
-		System.out.println("A = " + aux[0]);
-		System.out.println("B = " + aux[1]);
+		//String[] aux = translate(stringValues);
 		
+		makeArray(stringValues);
+		
+		for(int i=0; i<this.strings.length; i++){
+			System.out.println(this.strings[i] + ": " + "isInstruction: " + isInstruction(this.strings[i])
+					+ " :" + "isAtribution: " + isAtribution(this.strings[i]));
+		}
 		return stringValues;
 	}
 	
-	public String[] translate(String string) {
+	public void makeArray(String stringValues){
+		this.strings = stringValues.split(";");
+		
+		for(int i=0; i<this.strings.length; i++){
+			System.out.print(this.strings[i] + " ");
+		}
+		
+		System.out.println();
+	}
+	
+	public void cript(String stringsCommands){
+		for(int i=0; i<stringsCommands.length(); i++){
+			
+		}
+	}
+	
+	public boolean isInstruction(String instruction){
+		boolean isInstruction = true;
+		
+		for(int i=0; i<instruction.length(); i++){
+			if(instruction.charAt(i) == '='){
+				isInstruction = false;
+			}
+		}
+		
+		return isInstruction;
+	}
+	
+	public boolean isAtribution(String command){
+		boolean isAtribution = false;
+		
+		for(int i=0; i<command.length(); i++){
+			if(command.charAt(i) == '='){
+				isAtribution = true;
+			}
+		}
+		return isAtribution;
+	}
+	
+	/*public String[] translate(String string) {
 		int i=1;
 		int len = string.length();
 
@@ -87,9 +127,19 @@ public class Compiler {
 		//values[1] = Integer.toHexString(Integer.parseInt(values[1]));
 	
 		return values;
-	}
+	}*/
 	
-	public void generateByteCode(String stringValues, String stringCommands) {
+	public void generateByteCode(String stringValues) throws IOException {
+		//String aux = "";
+		
+		try{
+			file = new RandomAccessFile("testeHex.txt", "rw");
+			
+			
+			file.close();
+		}catch(FileNotFoundException fnfe){
+			fnfe.printStackTrace();
+		}
 		
 	}
 	
